@@ -30,7 +30,7 @@ namespace CPU
 		CLASS_F = 0xF000  //9 opcodes
 	};
 
-	const std::array<std::uint16_t, 0x10> OPCODE_CLASS_MASKS =
+	const std::array<std::uint16_t, 0x10> OP_CLASS_MASKS =
 	{
 		0xF000, //CLASS_0
 		0xF000, //CLASS_1
