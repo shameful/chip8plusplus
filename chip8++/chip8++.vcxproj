@@ -110,10 +110,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CPU.cpp" />
-    <ClCompile Include="Memory.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="CPU.h" />
     <ClInclude Include="Memory.h" />
   </ItemGroup>
