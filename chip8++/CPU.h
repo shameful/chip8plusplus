@@ -55,7 +55,7 @@ namespace CPU
 		//format N=constant, NN=constant, NNN=address, X=register, Y=register
 		CALL_RCA1802 = 0x0000, //0NNN
 		CLEAR_SCREEN = 0x00E0, //00E0
-		RETURN = 0x00EE, //00EE
+		RETURN_OP = 0x00EE, //00EE
 		JUMP = 0x1000, //1NNN
 		CALL = 0x2000, //2NNN
 		SKIP_EQ_VX = 0x3000, //3XNN
