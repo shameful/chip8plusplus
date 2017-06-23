@@ -1,5 +1,6 @@
 #pragma once
 #include <array>
+#include "Memory.h"
 
 namespace CPU
 {
@@ -102,7 +103,7 @@ namespace CPU
 		std::uint16_t PC; //program counter
 		std::uint8_t SP; //stack pointer
 
-						 //return address stack
+		//return address stack
 		std::array<uint16_t, 0xFF> cpu_stack;
 
 		//fetched opcode
@@ -382,6 +383,12 @@ namespace CPU
 				//should be unreachable
 				break;
 			}
+		}
+
+		void Dec_Timers()
+		{
+			if (DT > 0) { DT--; }
+			if (ST > 0) { ST--; }
 		}
 
 
