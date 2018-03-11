@@ -3,6 +3,7 @@
 
 namespace Display
 {
+
 	Chip8Display::Chip8Display()
 	{
 		Clear();
@@ -22,4 +23,5 @@ namespace Display
 	{
 		return std::uint8_t();
 	}
+
 }
