@@ -78,7 +78,19 @@ namespace CPU
 			break;
 		case CLASS_D:
 			//Draw a sprite at position (VX,VY) 8 pixels wide and N pixels high. format DXYN
-			//need to implement display interface first
+			//sets VF to 1 if pixels are changed from on to off
+			VX = (opcode & 0x0F00) >> 8;
+			VY = (opcode & 0x00F0) >> 4;
+			{
+				std::uint8_t length = opcode & 0x000F;
+				std::array<std::uint8_t, 15> sprite;
+				sprite.fill(0x00);
+				for (size_t i = 0; i < length; i++)
+				{
+					sprite[i] = memory->read(IR + i);
+				}
+				GPR[0xF] = display->DrawSprite(VX, VY, sprite, length);
+			}
 			break;
 		case CLASS_E:
 			Decode_Class_E();
@@ -101,6 +113,7 @@ namespace CPU
 		{
 		case CLEAR_SCREEN:
 			//clear the screen
+			display->Clear();
 			break;
 		case RETURN_OP:
 			//pop return address off the stack and point PC there
@@ -312,4 +325,9 @@ namespace CPU
 		if (cpu_status != CPU_RUN) { memory = &mem; }
 	}
 
+
+	void CPU::Chip8CPU::Set_Display(Display::Chip8Display & displ)
+	{
+		if (cpu_status != CPU_RUN) { display = &displ; }
+	}
 }

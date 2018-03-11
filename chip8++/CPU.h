@@ -1,5 +1,6 @@
 #pragma once
 #include "Memory.h"
+#include "Display.h"
 
 namespace CPU
 {
@@ -110,6 +111,9 @@ namespace CPU
 
 		//memory device pointer
 		Mem::Chip8Mem* memory;
+
+		//display pointer
+		Display::Chip8Display* display;
 
 		CPU_STATES cpu_status;
 
@@ -234,6 +238,7 @@ namespace CPU
 		~Chip8CPU();
 		void Cpu_initialize();
 		void Set_Memory_Device(Mem::Chip8Mem & mem);
+		void Set_Display(Display::Chip8Display & displ);
 
 	};
 }
