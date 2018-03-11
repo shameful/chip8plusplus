@@ -125,6 +125,7 @@ namespace CPU
 		std::uint16_t sprites_addr = 0x1A0;
 
 		const int SPRITEMAP_LENGTH = 0x50;
+		const int SPRITE_LENGTH = 5; //length of single sprite in bytes
 
 		//character sprites for characters 0 - F
 		std::array<std::uint8_t, 0x50> character_sprites = 
