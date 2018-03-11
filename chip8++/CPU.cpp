@@ -236,8 +236,8 @@ namespace CPU
 			break;
 		case LOAD_IR_SPRITE:
 			//load the sprite location for the character in VX into IR. format FX29
-			VX = (opcode & 0x0F00) >> 8; //offset of specific sprite to load (0 through F)
-			IR = sprites_addr + (VX * SPRITE_LENGTH);
+			VX = (opcode & 0x0F00) >> 8; //GPR[VX] contains offset of specific sprite to load (0 through F)
+			IR = sprites_addr + (GPR[VX] & 0x0F) * SPRITE_LENGTH;
 			break;
 		case STORE_BCD_VXIR:
 			//store VX as a BCD representation starting at the location in IR. format FX33
