@@ -73,7 +73,8 @@ namespace CPU
 			break;
 		case CLASS_C:
 			//Load (random & NN) into VX. format CXNN
-			//need a RNG first
+			VX = (opcode & 0x0F00) >> 8;
+			GPR[VX] = rand() & (opcode & 0x00FF);
 			break;
 		case CLASS_D:
 			//Draw a sprite at position (VX,VY) 8 pixels wide and N pixels high. format DXYN
