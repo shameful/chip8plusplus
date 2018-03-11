@@ -121,7 +121,7 @@ namespace CPU
 		void Decode_Class_F();
 		void Dec_Timers();
 
-		//starting memory address to load sprites into
+		//starting memory address to load sprites into 
 		std::uint16_t sprites_addr = 0x1A0;
 
 		const int SPRITEMAP_LENGTH = 0x50;
