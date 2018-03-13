@@ -5,6 +5,8 @@ namespace Display
 	class Chip8Display
 	{
 
+		std::array<std::uint8_t, 0x100> framebuffer; //64x32 pixels
+
 	public:
 
 		Chip8Display();
