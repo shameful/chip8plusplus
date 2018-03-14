@@ -56,4 +56,14 @@ namespace Display
 		return collision_flag;
 	}
 
+	std::uint8_t Display::Chip8Display::read(std::uint16_t addr)
+	{
+		if (addr < size_framebuffer) { return framebuffer[addr]; } //bounds check
+		return 0x00;
+	}
+
+	void Display::Chip8Display::write(std::uint16_t addr, std::uint8_t data)
+	{
+		if (addr < size_framebuffer) { framebuffer[addr] = data; }
+	}
 }
