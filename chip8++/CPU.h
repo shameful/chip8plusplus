@@ -124,6 +124,7 @@ namespace CPU
 		void Decode_Class_E();
 		void Decode_Class_F();
 		void Dec_Timers();
+		
 
 		//starting memory address to load sprites into 
 		std::uint16_t sprites_addr = 0x1A0;
@@ -239,6 +240,7 @@ namespace CPU
 		void Cpu_initialize();
 		void Set_Memory_Device(Mem::Chip8Mem & mem);
 		void Set_Display(Display::Chip8Display & displ);
-
+		void Load_Sprites(); //put spritemap into memory
+		void Execute_Step(); //perform one instruction
 	};
 }

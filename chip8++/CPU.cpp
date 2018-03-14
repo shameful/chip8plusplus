@@ -294,7 +294,6 @@ namespace CPU
 		if (ST > 0) { ST--; }
 	}
 
-
 	Chip8CPU::Chip8CPU()
 	{
 		Cpu_initialize();
@@ -311,7 +310,7 @@ namespace CPU
 		DT = 0;
 		ST = 0;
 		IR = 0;
-		PC = 0;
+		PC = 0x200;
 		SP = 0;
 		cpu_stack.fill(0x0000);
 		opcode = 0x0000;
@@ -329,4 +328,22 @@ namespace CPU
 	{
 		if (cpu_status != CPU_RUN) { display = &displ; }
 	}
+
+	void CPU::Chip8CPU::Load_Sprites()
+	{
+		for (size_t i = 0; i < SPRITEMAP_LENGTH; i++)
+		{
+			if (memory == NULL || display == NULL) { return; }
+			memory->write(sprites_addr + i, character_sprites[i]);
+			cpu_status = CPU_PAUSE;
+		}
+	}
+
+	void CPU::Chip8CPU::Execute_Step()
+	{
+		if (cpu_status != CPU_PAUSE && cpu_status != CPU_STOP) { return; }
+		Fetch_and_IncPC();
+		Decode_and_execute();
+	}
+
 }
