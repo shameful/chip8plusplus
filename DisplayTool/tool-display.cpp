@@ -1,4 +1,4 @@
-#include "Display.h"
+#include "../chip8++/Display.cpp"
 #include <iostream>
 #include <bitset>
 
