@@ -1,9 +1,12 @@
 #pragma once
+#include <array>
 
 namespace Display
 {
 	class Chip8Display
 	{
+
+	protected:
 
 		std::array<std::uint8_t, 0x100> framebuffer; //64x32 pixels
 

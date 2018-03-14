@@ -1,4 +1,3 @@
-#include <array>
 #include "CPU.h"
 
 namespace CPU

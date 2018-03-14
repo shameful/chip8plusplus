@@ -1,4 +1,3 @@
-#include <array>
 #include "Display.h"
 
 namespace Display

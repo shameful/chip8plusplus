@@ -118,6 +118,7 @@
     <ClCompile Include="CPU.cpp" />
     <ClCompile Include="Display.cpp" />
     <ClCompile Include="Memory.cpp" />
+    <ClCompile Include="tool-display.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
