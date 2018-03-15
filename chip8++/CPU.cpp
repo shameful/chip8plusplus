@@ -4,8 +4,9 @@ namespace CPU
 {
 	void Chip8CPU::Fetch_and_IncPC()
 	{
-		opcode = memory->read(PC);
-		PC++;
+		opcode = memory->read(PC) << 8;
+		opcode = opcode | memory->read(PC + 1);
+		PC += 2;
 	}
 
 	void Chip8CPU::Decode_and_execute()
@@ -30,18 +31,18 @@ namespace CPU
 		case CLASS_3:
 			//Skip the next instruction if VX == NN. format 3XNN
 			VX = (opcode & 0x0F00) >> 8;
-			if (GPR[VX] == (opcode & 0x00FF)) { PC++; }
+			if (GPR[VX] == (opcode & 0x00FF)) { PC += 2; }
 			break;
 		case CLASS_4:
 			//Skip the next instruction if VX != NN. format 4XNN
 			VX = (opcode & 0x0F00) >> 8;
-			if (GPR[VX] != (opcode & 0x00FF)) { PC++; }
+			if (GPR[VX] != (opcode & 0x00FF)) { PC += 2; }
 			break;
 		case CLASS_5:
 			//Skip the next instruction if VX == VY. format 5XY0
 			VX = (opcode & 0x0F00) >> 8;
 			VY = (opcode & 0x00F0) >> 4;
-			if (GPR[VX] == GPR[VY]) { PC++; }
+			if (GPR[VX] == GPR[VY]) { PC += 2; }
 			break;
 		case CLASS_6:
 			//Load NN into VX. format 6XNN
@@ -88,7 +89,7 @@ namespace CPU
 				{
 					sprite[i] = memory->read(IR + i);
 				}
-				GPR[0xF] = display->DrawSprite(VX, VY, sprite, length);
+				GPR[0xF] = display->DrawSprite(GPR[VX], GPR[VY], sprite, length);
 			}
 			break;
 		case CLASS_E:
@@ -342,6 +343,7 @@ namespace CPU
 	void CPU::Chip8CPU::Execute_Step()
 	{
 		if (cpu_status != CPU_PAUSE && cpu_status != CPU_STOP) { return; }
+		Dec_Timers();
 		Fetch_and_IncPC();
 		Decode_and_execute();
 	}
