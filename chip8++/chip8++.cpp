@@ -1,8 +1,9 @@
-#include "CPU.h"
+﻿#include "CPU.h"
 #include "Memory.h"
 #include "Display.h"
 #include <iostream>
 #include <bitset>
+#include <string>
 
 
 int main()
@@ -27,7 +28,7 @@ int main()
 	mem.write(0x210, 0x61); mem.write(0x211, 0x60); //0x6160 - load 0x60 into V1
 	mem.write(0x212, 0x62); mem.write(0x213, 0x60); //0x6260 - load 0x60 into V2
 	mem.write(0x214, 0x63); mem.write(0x215, 0x60); //0x6360 - load 0x60 into V3
-	mem.write(0x216, 0x64); mem.write(0x216, 0x60); //0x6460 - load 0x60 into V4
+	mem.write(0x216, 0x64); mem.write(0x217, 0x60); //0x6460 - load 0x60 into V4
 	mem.write(0x218, 0xA3); mem.write(0x219, 0x05); //0xA305 - load 0x305 into I (new sprite for 'T')
 	mem.write(0x21A, 0xF4); mem.write(0x21B, 0x55); //0xF455 - write V0 through V4 into memory at &I
 
@@ -39,7 +40,7 @@ int main()
 	mem.write(0x226, 0xA3); mem.write(0x227, 0x0A); //0xA30A - load 0x30A into I (new sprite for 'M')
 	mem.write(0x228, 0xF4); mem.write(0x229, 0x55); //0xF455 - write V0 through V4 into memory at &I
 
-	mem.write(0x22A, 0x60); mem.write(0x22A, 0x00); //0x6000 - load 0x00 into V0
+	mem.write(0x22A, 0x60); mem.write(0x22B, 0x00); //0x6000 - load 0x00 into V0
 	mem.write(0x22C, 0x61); mem.write(0x22D, 0x90); //0x6190 - load 0x90 into V1
 	mem.write(0x22E, 0x62); mem.write(0x22F, 0x60); //0x6260 - load 0x60 into V2
 	mem.write(0x230, 0x63); mem.write(0x231, 0x60); //0x6360 - load 0x60 into V3
@@ -119,8 +120,25 @@ int main()
 	{
 		for (size_t j = 0; j < 8; j++)
 		{
-			std::bitset<8> bits(display.read(i * 8 + j));
-			std::cout << bits;
+			std::string eight_pixels = "";
+			std::uint8_t bits(display.read(i * 8 + j));
+			if ((bits & 0b10000000) > 0) { eight_pixels += "0"; }
+			else { eight_pixels += "_"; }
+			if ((bits & 0b01000000) > 0) { eight_pixels += "0"; }
+			else { eight_pixels += "_"; }
+			if ((bits & 0b00100000) > 0) { eight_pixels += "0"; }
+			else { eight_pixels += "_"; }
+			if ((bits & 0b00010000) > 0) { eight_pixels += "0"; }
+			else { eight_pixels += "_"; }
+			if ((bits & 0b00001000) > 0) { eight_pixels += "0"; }
+			else { eight_pixels += "_"; }
+			if ((bits & 0b00000100) > 0) { eight_pixels += "0"; }
+			else { eight_pixels += "_"; }
+			if ((bits & 0b00000010) > 0) { eight_pixels += "0"; }
+			else { eight_pixels += "_"; }
+			if ((bits & 0b00000001) > 0) { eight_pixels += "0"; }
+			else { eight_pixels += "_"; }
+			std::cout << eight_pixels;
 		}
 		std::cout << "\n";
 	}
