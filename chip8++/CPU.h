@@ -92,6 +92,14 @@ namespace CPU
 		REG_LOAD = 0xF065, //FX65
 	};
 
+	enum RETURN_CODES
+	{
+		OK,
+		FAULT
+	};
+
+	const std::uint16_t PROG_START = 0x200;
+
 	class Chip8CPU
 	{
 
@@ -104,7 +112,7 @@ namespace CPU
 		std::uint8_t SP; //stack pointer
 
 		//return address stack
-		std::array<uint16_t, 0xFF> cpu_stack;
+		std::array<uint16_t, 0x100> cpu_stack;
 
 		//fetched opcode
 		std::uint16_t opcode;
@@ -116,6 +124,8 @@ namespace CPU
 		Display::Chip8Display* display;
 
 		CPU_STATES cpu_status;
+
+		RETURN_CODES execution_status;
 
 		void Fetch_and_IncPC();
 		void Decode_and_execute();
@@ -241,6 +251,6 @@ namespace CPU
 		void Set_Memory_Device(Mem::Chip8Mem & mem);
 		void Set_Display(Display::Chip8Display & displ);
 		void Load_Sprites(); //put spritemap into memory
-		void Execute_Step(); //perform one instruction
+		RETURN_CODES Execute_Step(); //perform one instruction
 	};
 }

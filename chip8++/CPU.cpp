@@ -99,7 +99,8 @@ namespace CPU
 			Decode_Class_F();
 			break;
 		default:
-			//should be unreachable
+			//invalid opcode
+			execution_status = FAULT;
 			break;
 		}
 	}
@@ -194,7 +195,8 @@ namespace CPU
 			GPR[VX] = GPR[VX] << 1;
 			break;
 		default:
-			//should be unreachable
+			//invalid opcode
+			execution_status = FAULT;
 			break;
 		}
 	}
@@ -204,7 +206,7 @@ namespace CPU
 	{
 		std::uint8_t VX = 0x00;
 		std::uint8_t VY = 0x00;
-		switch (opcode)
+		switch (opcode & 0xF0FF)
 		{
 		case SKIP_KEY_T:
 			//need to implement input first
@@ -213,7 +215,8 @@ namespace CPU
 			//need to implement input first
 			break;
 		default:
-			//should be unreachable
+			//invalid opcode
+			execution_status = FAULT;
 			break;
 		}
 	}
@@ -284,7 +287,8 @@ namespace CPU
 			}
 			break;
 		default:
-			//should be unreachable
+			//invalid opcode
+			execution_status = FAULT;
 			break;
 		}
 	}
@@ -311,10 +315,11 @@ namespace CPU
 		DT = 0;
 		ST = 0;
 		IR = 0;
-		PC = 0x200;
+		PC = PROG_START;
 		SP = 0;
 		cpu_stack.fill(0x0000);
 		opcode = 0x0000;
+		execution_status = OK;
 		cpu_status = CPU_INIT;
 	}
 
@@ -340,12 +345,14 @@ namespace CPU
 		}
 	}
 
-	void CPU::Chip8CPU::Execute_Step()
+	RETURN_CODES CPU::Chip8CPU::Execute_Step()
 	{
-		if (cpu_status != CPU_PAUSE && cpu_status != CPU_STOP) { return; }
+		execution_status = OK;
+		if (cpu_status != CPU_PAUSE && cpu_status != CPU_STOP) { return FAULT; }
 		Dec_Timers();
 		Fetch_and_IncPC();
 		Decode_and_execute();
+		return execution_status;
 	}
 
 }

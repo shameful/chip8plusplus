@@ -4,9 +4,10 @@
 #include <iostream>
 #include <bitset>
 #include <string>
+#include <fstream>
 
 
-int main()
+int main(int numArgs, char* args[])
 {
 	std::cout << "not fully implemented\n";
 	Mem::Chip8Mem mem;
@@ -16,19 +17,34 @@ int main()
 	cpu.Set_Display(display);
 	cpu.Load_Sprites();
 
-	
-
-
-	//run the instructions
-	for (size_t i = 0; i < 1; i++)
+	if (numArgs > 1)
 	{
-		cpu.Execute_Step();
-	} 
+		std::ifstream program(args[1], std::ios::binary);
+		if (program.is_open())
+		{
+			char junk = 'a';
+			char* byte = &junk;
+			for (std::uint16_t i = CPU::PROG_START; i < 0x1000; i++)
+			{
+				if (program.eof()) { program.close(); break; }
+				program.read(byte, 1);
+				mem.write(i, *byte);
+			}
+		}
+	}
+	
+	//run the instructions
+	CPU::RETURN_CODES status = CPU::RETURN_CODES::OK;
+	while (status == CPU::RETURN_CODES::OK)
+	{
+		status = cpu.Execute_Step();
+
+	}
 	
 	//print the framebuffer
-	for (size_t i = 0; i < 32; i++)
+	for (std::uint16_t i = 0; i < 32; i++)
 	{
-		for (size_t j = 0; j < 8; j++)
+		for (std::uint16_t j = 0; j < 8; j++)
 		{
 			std::string eight_pixels = "";
 			std::uint8_t bits(display.read(i * 8 + j));
