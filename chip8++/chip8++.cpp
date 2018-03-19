@@ -52,26 +52,32 @@ int main(int numArgs, char* args[])
 	{
 		status = cpu.Execute_Step();
 		SDL_PollEvent(&event_SDL);
-		//update the screen
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-		SDL_RenderClear(renderer);
-		SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-		for (std::uint16_t i = 0; i < 32; i++)
+
+		//check if framebuffer got changed since last instruction
+		if (display.flag_dirty == true)
 		{
-			for (std::uint16_t j = 0; j < 8; j++)
+			//update the screen
+			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+			SDL_RenderClear(renderer);
+			SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+			for (std::uint16_t i = 0; i < 32; i++)
 			{
-				std::uint8_t pixels = display.read(i * 8 + j);
-				if (pixels & 0b10000000) { SDL_RenderDrawPoint(renderer, j * 8, i); }
-				if (pixels & 0b01000000) { SDL_RenderDrawPoint(renderer, j * 8 + 1, i); }
-				if (pixels & 0b00100000) { SDL_RenderDrawPoint(renderer, j * 8 + 2, i); }
-				if (pixels & 0b00010000) { SDL_RenderDrawPoint(renderer, j * 8 + 3, i); }
-				if (pixels & 0b00001000) { SDL_RenderDrawPoint(renderer, j * 8 + 4, i); }
-				if (pixels & 0b00000100) { SDL_RenderDrawPoint(renderer, j * 8 + 5, i); }
-				if (pixels & 0b00000010) { SDL_RenderDrawPoint(renderer, j * 8 + 6, i); }
-				if (pixels & 0b00000001) { SDL_RenderDrawPoint(renderer, j * 8 + 7, i); }
+				for (std::uint16_t j = 0; j < 8; j++)
+				{
+					std::uint8_t pixels = display.read(i * 8 + j);
+					if (pixels & 0b10000000) { SDL_RenderDrawPoint(renderer, j * 8, i); }
+					if (pixels & 0b01000000) { SDL_RenderDrawPoint(renderer, j * 8 + 1, i); }
+					if (pixels & 0b00100000) { SDL_RenderDrawPoint(renderer, j * 8 + 2, i); }
+					if (pixels & 0b00010000) { SDL_RenderDrawPoint(renderer, j * 8 + 3, i); }
+					if (pixels & 0b00001000) { SDL_RenderDrawPoint(renderer, j * 8 + 4, i); }
+					if (pixels & 0b00000100) { SDL_RenderDrawPoint(renderer, j * 8 + 5, i); }
+					if (pixels & 0b00000010) { SDL_RenderDrawPoint(renderer, j * 8 + 6, i); }
+					if (pixels & 0b00000001) { SDL_RenderDrawPoint(renderer, j * 8 + 7, i); }
+				}
 			}
+			SDL_RenderPresent(renderer);
+			display.flag_dirty = false; //display has been updated
 		}
-		SDL_RenderPresent(renderer);
 	}
 	
 	//loop after finishing

@@ -5,6 +5,7 @@ namespace Display
 
 	Chip8Display::Chip8Display()
 	{
+		flag_dirty = false;
 		Clear();
 	}
 
@@ -16,6 +17,7 @@ namespace Display
 	void Chip8Display::Clear()
 	{
 		framebuffer.fill(0b00000000);
+		flag_dirty = true;
 	}
 
 	std::uint8_t Display::Chip8Display::DrawSprite(std::uint8_t x, std::uint8_t y, std::array<std::uint8_t, 15> sprite, std::uint8_t length)
@@ -53,6 +55,7 @@ namespace Display
 				framebuffer[resolved_coord] = framebuffer[resolved_coord] ^ sprite[i];
 			}
 		}
+		flag_dirty = true;
 		return collision_flag;
 	}
 
@@ -65,6 +68,7 @@ namespace Display
 	void Display::Chip8Display::write(std::uint16_t addr, std::uint8_t data)
 	{
 		if (addr < size_framebuffer) { framebuffer[addr] = data; }
+		flag_dirty = true;
 	}
 
 	

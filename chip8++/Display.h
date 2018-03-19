@@ -15,6 +15,7 @@ namespace Display
 
 	public:
 
+		bool flag_dirty; //true when the framebuffer has changed. display handler must manually set this false
 		Chip8Display();
 		~Chip8Display();
 
