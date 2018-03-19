@@ -5,6 +5,8 @@
 #include <bitset>
 #include <string>
 #include <fstream>
+#define SDL_MAIN_HANDLED //without this SDL tries to change the default main() entry point
+#include <SDL\SDL.h>
 
 
 int main(int numArgs, char* args[])
@@ -33,6 +35,16 @@ int main(int numArgs, char* args[])
 		}
 	}
 	
+	SDL_Init(SDL_INIT_VIDEO);
+	SDL_Window* window = SDL_CreateWindow("Chip8", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, 0);
+	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+	SDL_RenderClear(renderer);
+	SDL_Rect test_rect = { 0, 0, 400, 400 };
+	SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+	SDL_RenderFillRect(renderer, &test_rect);
+	SDL_RenderPresent(renderer);
+
 	//run the instructions
 	CPU::RETURN_CODES status = CPU::RETURN_CODES::OK;
 	while (status == CPU::RETURN_CODES::OK)
@@ -68,5 +80,9 @@ int main(int numArgs, char* args[])
 		}
 		std::cout << "\n";
 	}
+
+	while (1) { SDL_RenderPresent(renderer); }
 	
+	SDL_Quit();
+	return 0;
 }
