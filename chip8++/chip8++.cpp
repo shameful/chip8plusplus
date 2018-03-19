@@ -80,8 +80,6 @@ int main(int numArgs, char* args[])
 		}
 	}
 	
-	//loop after finishing
-	while (1) { SDL_PollEvent(&event_SDL); SDL_RenderPresent(renderer); }
 	
 	SDL_Quit();
 	return 0;

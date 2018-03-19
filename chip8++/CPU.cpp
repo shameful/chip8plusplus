@@ -1,4 +1,5 @@
 #include "CPU.h"
+#include <iostream>
 
 namespace CPU
 {
@@ -6,6 +7,7 @@ namespace CPU
 	{
 		opcode = memory->read(PC) << 8;
 		opcode = opcode | memory->read(PC + 1);
+		std::cout << std::hex << PC << " " << opcode << std::endl;
 		PC += 2;
 	}
 
@@ -61,7 +63,7 @@ namespace CPU
 			//Skip the next instruction if VX != VY. format 9XY0
 			VX = (opcode & 0x0F00) >> 8;
 			VY = (opcode & 0x00F0) >> 4;
-			if (GPR[VX] != GPR[VY]) { PC++; }
+			if (GPR[VX] != GPR[VY]) { PC += 2; }
 			break;
 		case CLASS_A:
 			//Load NNN into IR. format ANNN
