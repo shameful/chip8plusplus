@@ -66,4 +66,6 @@ namespace Display
 	{
 		if (addr < size_framebuffer) { framebuffer[addr] = data; }
 	}
+
+	
 }
