@@ -245,6 +245,8 @@ namespace CPU
 
 	public:
 
+		std::array<bool, 0x10> keystates; //status of keys. 0 = not pressed. 1 = pressed
+
 		Chip8CPU();
 		~Chip8CPU();
 		void Cpu_initialize();

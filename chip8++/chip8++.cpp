@@ -15,6 +15,7 @@ int main(int numArgs, char* args[])
 	Mem::Chip8Mem mem;
 	Display::Chip8Display display;
 	CPU::Chip8CPU cpu;
+	const Uint8* key_buffer = NULL;
 	cpu.Set_Memory_Device(mem);
 	cpu.Set_Display(display);
 	cpu.Load_Sprites();
@@ -52,6 +53,25 @@ int main(int numArgs, char* args[])
 	{
 		status = cpu.Execute_Step();
 		SDL_PollEvent(&event_SDL);
+
+		//handle inputs
+		key_buffer = SDL_GetKeyboardState(NULL);
+		cpu.keystates[0x0] = key_buffer[SDL_SCANCODE_1]; //row 1
+		cpu.keystates[0x1] = key_buffer[SDL_SCANCODE_2];
+		cpu.keystates[0x2] = key_buffer[SDL_SCANCODE_3];
+		cpu.keystates[0x3] = key_buffer[SDL_SCANCODE_4];
+		cpu.keystates[0x4] = key_buffer[SDL_SCANCODE_Q]; //row 2
+		cpu.keystates[0x5] = key_buffer[SDL_SCANCODE_W];
+		cpu.keystates[0x6] = key_buffer[SDL_SCANCODE_E];
+		cpu.keystates[0x7] = key_buffer[SDL_SCANCODE_R];
+		cpu.keystates[0x8] = key_buffer[SDL_SCANCODE_A]; //row 3
+		cpu.keystates[0x9] = key_buffer[SDL_SCANCODE_S];
+		cpu.keystates[0xA] = key_buffer[SDL_SCANCODE_D];
+		cpu.keystates[0xB] = key_buffer[SDL_SCANCODE_F];
+		cpu.keystates[0xC] = key_buffer[SDL_SCANCODE_Z]; //row 4
+		cpu.keystates[0xD] = key_buffer[SDL_SCANCODE_X];
+		cpu.keystates[0xE] = key_buffer[SDL_SCANCODE_C];
+		cpu.keystates[0xF] = key_buffer[SDL_SCANCODE_V];
 
 		//check if framebuffer got changed since last instruction
 		if (display.flag_dirty == true)

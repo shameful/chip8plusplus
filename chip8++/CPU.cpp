@@ -87,7 +87,7 @@ namespace CPU
 				std::uint8_t length = opcode & 0x000F;
 				std::array<std::uint8_t, 15> sprite;
 				sprite.fill(0x00);
-				for (size_t i = 0; i < length; i++)
+				for (std::uint16_t i = 0; i < length; i++)
 				{
 					sprite[i] = memory->read(IR + i);
 				}
@@ -211,10 +211,14 @@ namespace CPU
 		switch (opcode & 0xF0FF)
 		{
 		case SKIP_KEY_T:
-			//need to implement input first
+			//Skip the next instruction if the key in VX is pressed. format EX9E
+			VX = (opcode & 0x0F00) >> 8;
+			if (keystates[(GPR[VX] & 0x0F)]) { PC += 2; } //zero top bits from GPR to prevent out-of-bounds
 			break;
 		case SKIP_KEY_F:
-			//need to implement input first
+			//SKip the next instruction if the key in VX is not pressed. format EXA1
+			VX = (opcode & 0x0F00) >> 8;
+			if (!keystates[(GPR[VX] & 0x0F)]) { PC += 2; } //zero top bits from GPR to prevent out-of-bounds
 			break;
 		default:
 			//invalid opcode
@@ -236,7 +240,16 @@ namespace CPU
 			break;
 		case KEY_WAIT:
 			//wait until a key is pressed and store the key in VX. format FX0A
-			//need to implement input first
+			{
+			//limiting scope of key_found variable
+				VX = (opcode & 0x0F00) >> 8;
+				bool key_found = false;
+				for (std::uint8_t i = 0; i < 0x10; i++)
+				{
+					if (keystates[i]) { GPR[VX] = i; key_found = true; break; }
+				}
+				if (!key_found) { PC -= 2; }
+			}
 			break;
 		case LOAD_VX_DT:
 			//load VX into the delay timer. format FX15
@@ -322,6 +335,7 @@ namespace CPU
 		cpu_stack.fill(0x0000);
 		opcode = 0x0000;
 		execution_status = OK;
+		keystates.fill(false);
 		cpu_status = CPU_INIT;
 	}
 
@@ -339,7 +353,7 @@ namespace CPU
 
 	void CPU::Chip8CPU::Load_Sprites()
 	{
-		for (size_t i = 0; i < SPRITEMAP_LENGTH; i++)
+		for (std::uint16_t i = 0; i < SPRITEMAP_LENGTH; i++)
 		{
 			if (memory == NULL || display == NULL) { return; }
 			memory->write(sprites_addr + i, character_sprites[i]);
