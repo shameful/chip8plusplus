@@ -40,8 +40,8 @@ namespace Display
 				intermed_y = (y + i) % 32; //wrap around if going off screen
 				sprite_part_a = sprite[i] >> x_misalignment;
 				sprite_part_b = sprite[i] << (8 - x_misalignment);
-				collision_flag = collision_flag | (sprite_part_a & framebuffer[intermed_x + intermed_y * 8]);
-				collision_flag = collision_flag | (sprite_part_b & framebuffer[((intermed_x + 1) % 8) + intermed_y * 8]);
+				collision_flag = collision_flag || (sprite_part_a & framebuffer[intermed_x + intermed_y * 8]);
+				collision_flag = collision_flag || (sprite_part_b & framebuffer[((intermed_x + 1) % 8) + intermed_y * 8]);
 				framebuffer[intermed_x + intermed_y * 8] = framebuffer[intermed_x + intermed_y * 8] ^ sprite_part_a;
 				framebuffer[((intermed_x + 1) % 8) + intermed_y * 8] = framebuffer[((intermed_x + 1) % 8) + intermed_y * 8] ^ sprite_part_b;
 			}
@@ -51,7 +51,7 @@ namespace Display
 				intermed_x = x / 8;
 				intermed_y = (y + i) % 32; //wrap around if going off screen
 				resolved_coord = intermed_x + intermed_y * 8;
-				collision_flag = collision_flag | (sprite[i] & framebuffer[resolved_coord]);
+				collision_flag = collision_flag || (sprite[i] & framebuffer[resolved_coord]);
 				framebuffer[resolved_coord] = framebuffer[resolved_coord] ^ sprite[i];
 			}
 		}

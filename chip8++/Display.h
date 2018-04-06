@@ -7,9 +7,6 @@ namespace Display
 
 	class Chip8Display
 	{
-
-	protected:
-
 		
 		std::array<std::uint8_t, size_framebuffer> framebuffer; //64x32 pixels
 
