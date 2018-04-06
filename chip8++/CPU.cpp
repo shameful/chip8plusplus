@@ -336,7 +336,6 @@ namespace CPU
 		opcode = 0x0000;
 		execution_status = OK;
 		keystates.fill(false);
-		cpu_status = CPU_INIT;
 	}
 
 	void CPU::Chip8CPU::Load_Sprites(Mem::Chip8Mem &memory)
@@ -344,14 +343,12 @@ namespace CPU
 		for (std::uint16_t i = 0; i < SPRITEMAP_LENGTH; i++)
 		{
 			memory.write(sprites_addr + i, character_sprites[i]);
-			cpu_status = CPU_PAUSE;
 		}
 	}
 
 	RETURN_CODES CPU::Chip8CPU::Execute_Step(Mem::Chip8Mem &memory, Display::Chip8Display &display)
 	{
 		execution_status = OK;
-		if (cpu_status != CPU_PAUSE && cpu_status != CPU_STOP) { return FAULT; }
 		Dec_Timers();
 		Fetch_and_IncPC(memory);
 		Decode_and_execute(memory, display);

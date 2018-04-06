@@ -4,14 +4,7 @@
 
 namespace CPU
 {
-	enum CPU_STATES
-	{
-		CPU_INIT, //initial state
-		CPU_PAUSE, //ready to run
-		CPU_RUN, //running
-		CPU_STOP //halted
-	};
-
+	
 	enum OPCODE_CLASSES
 	{
 		CLASS_0 = 0x0000, //CallRCA, ClearDisplay, Return
@@ -98,6 +91,7 @@ namespace CPU
 		FAULT
 	};
 
+	//entry point for programs
 	const std::uint16_t PROG_START = 0x200;
 
 	class Chip8CPU
@@ -116,8 +110,6 @@ namespace CPU
 
 		//fetched opcode
 		std::uint16_t opcode;
-
-		CPU_STATES cpu_status;
 
 		RETURN_CODES execution_status;
 
