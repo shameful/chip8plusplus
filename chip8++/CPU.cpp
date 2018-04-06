@@ -3,22 +3,22 @@
 
 namespace CPU
 {
-	void Chip8CPU::Fetch_and_IncPC()
+	void Chip8CPU::Fetch_and_IncPC(Mem::Chip8Mem &memory)
 	{
-		opcode = memory->read(PC) << 8;
-		opcode = opcode | memory->read(PC + 1);
+		opcode = memory.read(PC) << 8;
+		opcode = opcode | memory.read(PC + 1);
 		std::cout << std::hex << PC << " " << opcode << std::endl;
 		PC += 2;
 	}
 
-	void Chip8CPU::Decode_and_execute()
+	void Chip8CPU::Decode_and_execute(Mem::Chip8Mem &memory, Display::Chip8Display &display)
 	{
 		std::uint8_t VX = 0x00;
 		std::uint8_t VY = 0x00;
 		switch (opcode & 0xF000)
 		{
 		case CLASS_0:
-			Decode_Class_0();
+			Decode_Class_0(memory, display);
 			break;
 		case CLASS_1:
 			//Jump to address NNN. format 1NNN
@@ -57,7 +57,7 @@ namespace CPU
 			GPR[VX] += opcode & 0x00FF;
 			break;
 		case CLASS_8:
-			Decode_Class_8();
+			Decode_Class_8(memory, display);
 			break;
 		case CLASS_9:
 			//Skip the next instruction if VX != VY. format 9XY0
@@ -89,16 +89,16 @@ namespace CPU
 				sprite.fill(0x00);
 				for (std::uint16_t i = 0; i < length; i++)
 				{
-					sprite[i] = memory->read(IR + i);
+					sprite[i] = memory.read(IR + i);
 				}
-				GPR[0xF] = display->DrawSprite(GPR[VX], GPR[VY], sprite, length);
+				GPR[0xF] = display.DrawSprite(GPR[VX], GPR[VY], sprite, length);
 			}
 			break;
 		case CLASS_E:
-			Decode_Class_E();
+			Decode_Class_E(memory, display);
 			break;
 		case CLASS_F:
-			Decode_Class_F();
+			Decode_Class_F(memory, display);
 			break;
 		default:
 			//invalid opcode
@@ -108,7 +108,7 @@ namespace CPU
 	}
 
 	//RCA 1802 calls, Clear_screen, and Return from subroutine
-	void Chip8CPU::Decode_Class_0()
+	void Chip8CPU::Decode_Class_0(Mem::Chip8Mem &memory, Display::Chip8Display &display)
 	{
 		std::uint8_t VX = 0x00;
 		std::uint8_t VY = 0x00;
@@ -116,7 +116,7 @@ namespace CPU
 		{
 		case CLEAR_SCREEN:
 			//clear the screen
-			display->Clear();
+			display.Clear();
 			break;
 		case RETURN_OP:
 			//pop return address off the stack and point PC there
@@ -130,7 +130,7 @@ namespace CPU
 	}
 
 	//arithmetic and bitwise operations
-	void Chip8CPU::Decode_Class_8()
+	void Chip8CPU::Decode_Class_8(Mem::Chip8Mem &memory, Display::Chip8Display &display)
 	{
 		std::uint8_t VX = 0x00;
 		std::uint8_t VY = 0x00;
@@ -204,7 +204,7 @@ namespace CPU
 	}
 
 	//skip if key is held, skip if key is not held
-	void Chip8CPU::Decode_Class_E()
+	void Chip8CPU::Decode_Class_E(Mem::Chip8Mem &memory, Display::Chip8Display &display)
 	{
 		std::uint8_t VX = 0x00;
 		std::uint8_t VY = 0x00;
@@ -227,7 +227,7 @@ namespace CPU
 		}
 	}
 
-	void Chip8CPU::Decode_Class_F()
+	void Chip8CPU::Decode_Class_F(Mem::Chip8Mem &memory, Display::Chip8Display &display)
 	{
 		std::uint8_t VX = 0x00;
 		std::uint8_t VY = 0x00;
@@ -280,9 +280,9 @@ namespace CPU
 			std::uint8_t tempc = GPR[VX];
 			tempb -= tempa * 10;
 			tempc -= tempa * 100 + tempb * 10;
-			memory->write(IR, tempa);
-			memory->write(IR + 1, tempb);
-			memory->write(IR + 2, tempc);
+			memory.write(IR, tempa);
+			memory.write(IR + 1, tempb);
+			memory.write(IR + 2, tempc);
 		}
 		break;
 		case REG_STO:
@@ -290,7 +290,7 @@ namespace CPU
 			VX = (opcode & 0x0F00) >> 8;
 			for (std::uint8_t i = 0; i <= VX; i++)
 			{
-				memory->write(IR + i, GPR[i]);
+				memory.write(IR + i, GPR[i]);
 			}
 			break;
 		case REG_LOAD:
@@ -298,7 +298,7 @@ namespace CPU
 			VX = (opcode & 0x0F00) >> 8;
 			for (std::uint8_t i = 0; i <= VX; i++)
 			{
-				GPR[i] = memory->read(IR + i);
+				GPR[i] = memory.read(IR + i);
 			}
 			break;
 		default:
@@ -339,35 +339,22 @@ namespace CPU
 		cpu_status = CPU_INIT;
 	}
 
-	void Chip8CPU::Set_Memory_Device(Mem::Chip8Mem &mem)
-	{
-		//don't change memory device while running
-		if (cpu_status != CPU_RUN) { memory = &mem; }
-	}
-
-
-	void CPU::Chip8CPU::Set_Display(Display::Chip8Display & displ)
-	{
-		if (cpu_status != CPU_RUN) { display = &displ; }
-	}
-
-	void CPU::Chip8CPU::Load_Sprites()
+	void CPU::Chip8CPU::Load_Sprites(Mem::Chip8Mem &memory)
 	{
 		for (std::uint16_t i = 0; i < SPRITEMAP_LENGTH; i++)
 		{
-			if (memory == NULL || display == NULL) { return; }
-			memory->write(sprites_addr + i, character_sprites[i]);
+			memory.write(sprites_addr + i, character_sprites[i]);
 			cpu_status = CPU_PAUSE;
 		}
 	}
 
-	RETURN_CODES CPU::Chip8CPU::Execute_Step()
+	RETURN_CODES CPU::Chip8CPU::Execute_Step(Mem::Chip8Mem &memory, Display::Chip8Display &display)
 	{
 		execution_status = OK;
 		if (cpu_status != CPU_PAUSE && cpu_status != CPU_STOP) { return FAULT; }
 		Dec_Timers();
-		Fetch_and_IncPC();
-		Decode_and_execute();
+		Fetch_and_IncPC(memory);
+		Decode_and_execute(memory, display);
 		return execution_status;
 	}
 

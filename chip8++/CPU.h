@@ -117,22 +117,16 @@ namespace CPU
 		//fetched opcode
 		std::uint16_t opcode;
 
-		//memory device pointer
-		Mem::Chip8Mem* memory;
-
-		//display pointer
-		Display::Chip8Display* display;
-
 		CPU_STATES cpu_status;
 
 		RETURN_CODES execution_status;
 
-		void Fetch_and_IncPC();
-		void Decode_and_execute();
-		void Decode_Class_0();
-		void Decode_Class_8();
-		void Decode_Class_E();
-		void Decode_Class_F();
+		void Fetch_and_IncPC(Mem::Chip8Mem &memory);
+		void Decode_and_execute(Mem::Chip8Mem &memory, Display::Chip8Display &display);
+		void Decode_Class_0(Mem::Chip8Mem &memory, Display::Chip8Display &display);
+		void Decode_Class_8(Mem::Chip8Mem &memory, Display::Chip8Display &display);
+		void Decode_Class_E(Mem::Chip8Mem &memory, Display::Chip8Display &display);
+		void Decode_Class_F(Mem::Chip8Mem &memory, Display::Chip8Display &display);
 		void Dec_Timers();
 		
 
@@ -250,9 +244,7 @@ namespace CPU
 		Chip8CPU();
 		~Chip8CPU();
 		void Cpu_initialize();
-		void Set_Memory_Device(Mem::Chip8Mem & mem);
-		void Set_Display(Display::Chip8Display & displ);
-		void Load_Sprites(); //put spritemap into memory
-		RETURN_CODES Execute_Step(); //perform one instruction
+		void Load_Sprites(Mem::Chip8Mem &memory); //put spritemap into memory
+		RETURN_CODES Execute_Step(Mem::Chip8Mem &memory, Display::Chip8Display &display); //perform one instruction
 	};
 }

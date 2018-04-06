@@ -16,9 +16,7 @@ int main(int numArgs, char* args[])
 	Display::Chip8Display display;
 	CPU::Chip8CPU cpu;
 	const Uint8* key_buffer = NULL;
-	cpu.Set_Memory_Device(mem);
-	cpu.Set_Display(display);
-	cpu.Load_Sprites();
+	cpu.Load_Sprites(mem);
 
 	if (numArgs > 1)
 	{
@@ -51,7 +49,7 @@ int main(int numArgs, char* args[])
 	CPU::RETURN_CODES status = CPU::RETURN_CODES::OK;
 	while (status == CPU::RETURN_CODES::OK)
 	{
-		status = cpu.Execute_Step();
+		status = cpu.Execute_Step(mem, display);
 		SDL_PollEvent(&event_SDL);
 
 		//handle inputs
