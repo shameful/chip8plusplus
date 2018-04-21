@@ -6,7 +6,7 @@
 #include <string>
 #include <fstream>
 #define SDL_MAIN_HANDLED //without this SDL tries to change the default main() entry point
-#include <SDL\SDL.h>
+#include <SDL2/SDL.h>
 
 
 int main(int numArgs, char* args[])
