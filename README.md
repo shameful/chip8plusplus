@@ -15,3 +15,9 @@ Building:
     
     mkdir bin
     g++ -lSDL2 ./chip8++/CPU.cpp ./chip8++/Memory.cpp ./chip8++/Display.cpp ./chip8++/chip8++.cpp -o ./bin/chip8++
+
+---
+
+Usage:
+
+`chip8++ [program]` where program is a chip-8 binary
