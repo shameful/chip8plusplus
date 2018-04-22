@@ -13,6 +13,7 @@ namespace Mem
 		//0x200 - 0xFFF(?) program space
 
 	public:
+		bool sprites_loaded;
 		std::uint8_t read(uint16_t addr);
 		void write(uint16_t addr, uint8_t data);
 		Chip8Mem();

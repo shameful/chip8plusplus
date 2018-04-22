@@ -344,10 +344,12 @@ namespace CPU
 		{
 			memory.write(sprites_addr + i, character_sprites[i]);
 		}
+		memory.sprites_loaded = true;
 	}
 
 	RETURN_CODES CPU::Chip8CPU::Execute_Step(Mem::Chip8Mem &memory, Display::Chip8Display &display)
 	{
+		if (!memory.sprites_loaded) { Load_Sprites(memory); }
 		execution_status = OK;
 		Dec_Timers();
 		Fetch_and_IncPC(memory);

@@ -120,6 +120,7 @@ namespace CPU
 		void Decode_Class_E(Mem::Chip8Mem &memory, Display::Chip8Display &display);
 		void Decode_Class_F(Mem::Chip8Mem &memory, Display::Chip8Display &display);
 		void Dec_Timers();
+		void Load_Sprites(Mem::Chip8Mem &memory); //put spritemap into memory
 		
 
 		//starting memory address to load sprites into 
@@ -236,7 +237,7 @@ namespace CPU
 		Chip8CPU();
 		~Chip8CPU();
 		void Cpu_initialize();
-		void Load_Sprites(Mem::Chip8Mem &memory); //put spritemap into memory
+		
 		RETURN_CODES Execute_Step(Mem::Chip8Mem &memory, Display::Chip8Display &display); //perform one instruction
 	};
 }

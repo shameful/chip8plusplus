@@ -20,6 +20,7 @@ namespace Mem
 	Chip8Mem::Chip8Mem()
 	{
 		memory.fill(BIT_PATTERN);
+		sprites_loaded = false;
 	}
 
 	Chip8Mem::~Chip8Mem() {}

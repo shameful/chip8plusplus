@@ -16,7 +16,6 @@ int main(int numArgs, char* args[])
 	Display::Chip8Display display;
 	CPU::Chip8CPU cpu;
 	const Uint8* key_buffer = NULL;
-	cpu.Load_Sprites(mem);
 
 	if (numArgs > 1)
 	{
