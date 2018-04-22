@@ -7,7 +7,6 @@ namespace Mem
 	class Chip8Mem
 	{
 
-	protected:
 		std::array<std::uint8_t, 0x1000> memory;
 		//mapping
 		//0x000 - 0x1FF reserved for interpreter
