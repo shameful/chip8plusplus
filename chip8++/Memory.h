@@ -12,10 +12,14 @@ namespace Mem
 		//0x000 - 0x1FF reserved for interpreter
 		//0x200 - 0xFFF(?) program space
 
-	public:
 		bool sprites_loaded;
+
+	public:
+		
 		std::uint8_t read(uint16_t addr);
 		void write(uint16_t addr, uint8_t data);
+		bool checkSpritesLoaded();
+		void setSpritesLoaded(bool loaded);
 		Chip8Mem();
 		~Chip8Mem();
 	};

@@ -17,6 +17,16 @@ namespace Mem
 		if (addr < 0x1000) { memory[addr] = data; } //bounds check
 	}
 
+	bool Chip8Mem::checkSpritesLoaded()
+	{
+		return sprites_loaded;
+	}
+
+	void Chip8Mem::setSpritesLoaded(bool loaded)
+	{
+		sprites_loaded = loaded;
+	}
+	
 	Chip8Mem::Chip8Mem()
 	{
 		memory.fill(BIT_PATTERN);
