@@ -7,7 +7,6 @@ namespace CPU
 	{
 		opcode = memory.read(PC) << 8;
 		opcode = opcode | memory.read(PC + 1);
-		std::cout << std::hex << PC << " " << opcode << std::endl;
 		PC += 2;
 	}
 
